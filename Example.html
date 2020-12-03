@@ -47,18 +47,6 @@
 *
 *****************************************************************************/
 
-    const MAX_FRAME_LENGTH = 16000;
-    var gInFIFO=new Array(MAX_FRAME_LENGTH).fill(0.0);
-    var gOutFIFO=new Array(MAX_FRAME_LENGTH).fill(0.0);
-    var gFFTworksp = new Array(2*MAX_FRAME_LENGTH).fill(0.0);
-    var gLastPhase = new Array(MAX_FRAME_LENGTH/2+1).fill(0.0);
-    var gSumPhase = new Array(MAX_FRAME_LENGTH/2+1).fill(0.0);
-    var gOutputAccum = new Array(2*MAX_FRAME_LENGTH).fill(0.0);
-    var gAnaFreq = new Array(MAX_FRAME_LENGTH).fill(0.0);
-    var gAnaMagn = new Array(MAX_FRAME_LENGTH).fill(0.0);
-    var gSynFreq = new Array(MAX_FRAME_LENGTH).fill(0.0);
-    var gSynMagn =new Array(MAX_FRAME_LENGTH).fill(0.0);
-    var gRover=0;
     var AudioContext = window.AudioContext || window.webkitAudioContext;
     var audioCtx = new AudioContext();
 
@@ -83,7 +71,7 @@
                     console.log(shiftAmount);
                     in_data_l= PitchShift(shiftAmount, in_data_l.length, 1024, 10, audioCtx.sampleRate, in_data_l);
                     console.log(in_data_l);
-                    in_data_r= PitchShift(shiftAmount, in_data_l.length, 1024, 10, audioCtx.sampleRate, in_data_r);
+                    in_data_r= PitchShift(shiftAmount, in_data_r.length, 1024, 10, audioCtx.sampleRate, in_data_r);
                     decodedData.copyToChannel(in_data_l, 0);
                     decodedData.copyToChannel(in_data_r, 1);
                     var source = audioCtx.createBufferSource(); // creates a sound source
@@ -108,8 +96,20 @@
             /* double */ var freqPerBin, expct;
             /* long */ var i, k, qpd, index, inFifoLatency, stepSize, fftFrameSize2;
 
-
-            /* float[] */var outdata = indata;
+        const MAX_FRAME_LENGTH = 16000;
+        var gInFIFO=new Array(MAX_FRAME_LENGTH).fill(0.0);
+        var gOutFIFO=new Array(MAX_FRAME_LENGTH).fill(0.0);
+        var gFFTworksp = new Array(2*MAX_FRAME_LENGTH).fill(0.0);
+        var gLastPhase = new Array(MAX_FRAME_LENGTH/2+1).fill(0.0);
+        var gSumPhase = new Array(MAX_FRAME_LENGTH/2+1).fill(0.0);
+        var gOutputAccum = new Array(2*MAX_FRAME_LENGTH).fill(0.0);
+        var gAnaFreq = new Array(MAX_FRAME_LENGTH).fill(0.0);
+        var gAnaMagn = new Array(MAX_FRAME_LENGTH).fill(0.0);
+        var gSynFreq = new Array(MAX_FRAME_LENGTH).fill(0.0);
+        var gSynMagn =new Array(MAX_FRAME_LENGTH).fill(0.0);
+        var gRover=0;
+        
+        /* float[] */var outdata = indata;
         /* set up some handy variables */
         fftFrameSize2 = Math.trunc(fftFrameSize / 2);
         stepSize = Math.trunc(fftFrameSize / osamp);
